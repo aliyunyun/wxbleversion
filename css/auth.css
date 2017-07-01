@@ -1,0 +1,37 @@
+.authmaccontainer {
+  width: 100%;
+}
+
+.authmacinput {
+  margin: 60px auto;
+  margin-left: 20px;
+}
+
+.authmacinput p {
+  font-size: 18px;
+  color: #111;
+}
+
+.authmacinput input {
+  height: 30px;
+  margin: 10px auto;
+}
+
+.authButton {
+  font-size: 16px;
+  color: #888888;
+  border: 1px solid #dedede;
+  width: 80px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.authoReault {
+  margin-top: 10px;
+}
+
+.authoReault .title {
+  margin-left: 20px;
+}

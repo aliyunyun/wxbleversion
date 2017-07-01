@@ -97,12 +97,18 @@
 
 	var _Constant = __webpack_require__(282);
 
+	var _Auth = __webpack_require__(287);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	// import {Funs} from '../../../common/src/fun.es6';
 	var _ReactRouter = ReactRouter,
 	    Router = _ReactRouter.Router,
 	    Route = _ReactRouter.Route,
-	    hashHistory = _ReactRouter.hashHistory; // import {Funs} from '../../../common/src/fun.es6';
+	    hashHistory = _ReactRouter.hashHistory;
+
 
 	var C_DEVICEID = "";
 	het.domReady(function () {
@@ -236,7 +242,8 @@
 	        { history: hashHistory },
 	        React.createElement(Route, { path: '/', component: App }),
 	        React.createElement(Route, { path: '/test', component: _testView2.default }),
-	        React.createElement(Route, { path: '/scan', component: _ScanWXBLE2.default })
+	        React.createElement(Route, { path: '/scan', component: _ScanWXBLE2.default }),
+	        React.createElement(Route, { path: '/auth', component: _Auth2.default })
 	    ), document.getElementById('ROOT'));
 	});
 
@@ -2160,7 +2167,7 @@
 	                var indexData = -1;
 	                for (var _i2 = 0; _i2 < len; _i2++) {
 	                    if (array[_i2] == 58) {
-	                        alert("找到hd的数据了");
+	                        //alert("找到hd的数据了");
 	                        indexData = _i2;
 	                    }
 	                }
@@ -2182,11 +2189,12 @@
 	            var byte4data = dataArray[4];
 	            var byte5data = dataArray[5];
 	            if (byte4data == 160) {
-	                alert("HD 回复数据");
+	                // alert("HD 回复数据");
 	                if (byte5data == 64) {
-	                    alert("HD 回复数据 设备数据上传");
+	                    //alert("HD 回复数据 设备数据上传");
+
 	                } else if (byte5data == 55) {
-	                    alert("HD 回复数据 设备运行数据上传");
+	                    //alert("HD 回复数据 设备运行数据上传");
 	                    var btye3data = dataArray[2];
 	                    var dataLength = btye3data - 4;
 	                    var dataStart = 6; // 协议中数据位的起始位
@@ -2202,7 +2210,7 @@
 	                    showAlertMessage: "发送数据失败"
 	                });
 	            } else {
-	                alert("数据错误" + (0, _stringify2.default)(dataArray));
+	                // alert("数据错误" + JSON.stringify(dataArray));
 	            }
 	        }
 	    }, {
@@ -2222,10 +2230,12 @@
 	            var _this = this;
 	            var selDeviceID = this.state.deviceId || C_DEVICEID;
 	            if (selDeviceID.length < 1) {
-	                alert("设备ID出错!");
+	                // alert("设备ID出错!");
+	                return;
 	            }
 	            if (baseData.length < 1) {
-	                alert("命令失败 ");
+	                //alert("命令失败 ");
+	                return;
 	            }
 
 	            sendTime = setTimeout(function () {
@@ -7139,7 +7149,7 @@
 	        key: 'handlerChange',
 	        value: function handlerChange(e) {
 	            var value = parseInt(e.currentTarget.value);
-	            console.log("input value: " + value);
+	            //console.log("input value: " + value);
 	            this.setState({ value: value });
 	            if (typeof this.props.fnFeedback === "function") {
 	                this.props.fnFeedback(value);
@@ -7153,7 +7163,7 @@
 	            var oldPropValue = this.oldPropValue || 0;
 	            var propsValue = this.props.value || 0;
 	            var stateValue = this.state.value || 0;
-	            console.log("updata: oldPropValue: " + oldPropValue + " propsValue: " + propsValue + "  stateValue: " + stateValue + " value: " + value);
+	            // console.log("updata: oldPropValue: " + oldPropValue + " propsValue: " + propsValue + "  stateValue: " + stateValue + " value: " + value);
 
 	            this.oldPropValue = this.props.value;
 	            this.state.value = value;
@@ -7171,7 +7181,8 @@
 	            var propsValue = this.props.value || 0;
 	            var stateValue = this.state.value || 0;
 	            var value = typeof this.state.value !== "undefined" && this.oldPropValue === this.props.value ? this.state.value : this.props.value;
-	            console.log("render: oldPropValue: " + oldPropValue + " propsValue: " + propsValue + "  stateValue: " + stateValue + " value: " + value);
+	            // console.log("render: oldPropValue: " + oldPropValue + " propsValue: " + propsValue + "  stateValue: " + stateValue + " value: " + value);
+
 
 	            return React.createElement(
 	                'div',
@@ -25763,7 +25774,7 @@
 	var C_DEVICEID = "";
 	var animationTime = 10 * 1000;
 	//{"deviceId":"gh_e9602e23e9b7_7b252d0c6aa23b8e"}
-	var time = void 0;
+	var time = 0;
 
 	var ScanWXBLE = function (_Component) {
 	    (0, _inherits3.default)(ScanWXBLE, _Component);
@@ -25869,7 +25880,7 @@
 	                    console.log("startScanWXDevice : " + (0, _stringify2.default)(res));
 	                    //alert("startScanWXDevice : " + JSON.stringify(res));
 	                    clearTimeout(time);
-
+	                    time = 0;
 	                    var devices = res.devices;
 	                    if (devices.length == 1) {
 	                        _this.setState({
@@ -25897,9 +25908,12 @@
 	    }, {
 	        key: 'scanAction',
 	        value: function scanAction() {
+	            if (time != 0) {
+	                return;
+	            }
+
 	            this.setState({
 	                loadingShow: true
-
 	            });
 
 	            var _this = this;
@@ -25909,7 +25923,9 @@
 	                    showAlert: true,
 	                    showAlertMessage: "扫描失败"
 	                });
+	                time = 0;
 	            }, animationTime);
+
 	            console.log("startScanWXDevice  ");
 	            wx.invoke('startScanWXDevice', {}, function (res) {
 	                console.log("startScanWXDevice : " + (0, _stringify2.default)(res));
@@ -25972,13 +25988,15 @@
 	        key: 'alertCallBack',
 	        value: function alertCallBack() {
 	            this.setState({
-	                showAlert: false,
-	                loadingShow: true
+	                showAlert: false
 	            });
 
 	            var _this = this;
 	            var needConnect = this.state.needConnectToWXDevice;
 	            if (needConnect == true) {
+	                this.setState({
+	                    loadingShow: true
+	                });
 	                if (C_DEVICEID.length > 1) {
 	                    setTimeout(function () {
 	                        wx.invoke('connectWXDevice', { 'deviceId': C_DEVICEID, 'connType': 'blue' }, function (res) {
@@ -26228,6 +26246,140 @@
 
 	exports.default = LoadingGif;
 	;
+
+/***/ }),
+/* 287 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _getPrototypeOf = __webpack_require__(2);
+
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+	var _classCallCheck2 = __webpack_require__(28);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _createClass2 = __webpack_require__(29);
+
+	var _createClass3 = _interopRequireDefault(_createClass2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(33);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(80);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _react = __webpack_require__(95);
+
+	var _Constant = __webpack_require__(282);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Auth = function (_Component) {
+	    (0, _inherits3.default)(Auth, _Component);
+
+	    function Auth(props) {
+	        (0, _classCallCheck3.default)(this, Auth);
+
+	        var _this = (0, _possibleConstructorReturn3.default)(this, (Auth.__proto__ || (0, _getPrototypeOf2.default)(Auth)).call(this, props));
+
+	        _this.state = {};
+
+	        return _this;
+	    }
+
+	    (0, _createClass3.default)(Auth, [{
+	        key: 'authAction',
+	        value: function authAction() {
+	            var input = this.refs.myInput;
+	            var inputValue = input.value;
+	            console.log("myInputValue:" + inputValue);
+
+	            if (inputValue.length != 12) {
+	                alert("输入mac地址长度应该是12");
+	                return;
+	            }
+
+	            if (inputValue.indexOf(":") > 0) {
+	                alert("输入mac地址不能包含:");
+	                return;
+	            }
+
+	            this.authfunction(inputValue);
+	        }
+	    }, {
+	        key: 'authfunction',
+	        value: function authfunction(macadd) {
+
+	            if (macadd.length < 1) {
+	                console.log("mac  error");
+	                return;
+	            }
+
+	            var url = "http://" + _Constant.reqdomain + '/wxhardware/wechat/hardware/authDeviceSingle';
+	            var parms = { mac: macadd };
+
+	            console.log("dom ready");
+	            het.post(url, parms, function (data) {
+
+	                console.log("success hahahah: " + data);
+	                // alert("success hahahah:"  + data +  " status:" + status);
+	                if (typeof data == 'string') {
+	                    data = JSON.parse(data);
+	                }
+	                if (data.code == 0) {
+	                    alert("授权成功");
+	                } else {
+	                    alert("授权失败");
+	                }
+	            }, function (msg) {
+	                //alert("req failed:"  + msg);
+	                alert("授权失败" + msg);
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+
+	            return React.createElement(
+	                'div',
+	                { className: 'authmaccontainer' },
+	                React.createElement(
+	                    'div',
+	                    { className: 'authmacinput ' },
+	                    React.createElement(
+	                        'p',
+	                        null,
+	                        'mac:'
+	                    ),
+	                    React.createElement('input', { type: 'text', name: 'name', ref: 'myInput' }),
+	                    React.createElement(
+	                        'div',
+	                        { className: 'authButton', onClick: this.authAction.bind(this) },
+	                        '\u6388\u6743'
+	                    )
+	                ),
+	                React.createElement(
+	                    'div',
+	                    { className: 'authoReault' },
+	                    React.createElement('div', { className: 'title' }),
+	                    React.createElement('p', null)
+	                )
+	            );
+	        }
+	    }]);
+	    return Auth;
+	}(_react.Component);
+
+	exports.default = Auth;
 
 /***/ })
 /******/ ]);
