@@ -25997,7 +25997,7 @@
 	    }, {
 	        key: 'bindwxbutton',
 	        value: function bindwxbutton() {
-	            window.history.go(-1);
+
 	            var selectIndex = this.state.selectDeviceIndex;
 	            if (selectIndex < 0) {
 	                console.log("请选择设备");
