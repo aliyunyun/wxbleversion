@@ -1,0 +1,155 @@
+.scale_panel {
+  height: 2.6rem;
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+.scale_panel>input[type=range] {
+  position: absolute;
+  z-index: 3;
+  height: 2.6rem;
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  opacity: 0;
+}
+
+.scale_panel>input[type=range]::-webkit-slider-runnable-track {
+  height: 2.6rem;
+}
+
+.scale_panel>input[type=range]::-webkit-slider-thumb {
+  display: inline-block;
+  position: relative;
+  padding: 0rem;
+  height: 2.6rem;
+  width: 2.6rem;
+}
+
+/*.type-range {*/
+
+/*position: absolute;*/
+
+/*top: 0;*/
+
+/*width: 100%;*/
+
+/*height:  3rem;*/
+
+/*z-index: 1000;*/
+
+/*opacity: 0;*/
+
+/*}*/
+
+/*input[type=range] {*/
+
+/*position: relative;*/
+
+/*width: 100%;*/
+
+/*}*/
+
+/*input[type=range]::-webkit-slider-runnable-track {*/
+
+/*position: relative;*/
+
+/*z-index: 9999;*/
+
+/*width: 100%;*/
+
+/*height: 100%;*/
+
+/*background: transparent;*/
+
+/*border: 0;*/
+
+/*box-shadow: none;*/
+
+/*}*/
+
+/*input[type=range]::-webkit-slider-thumb {*/
+
+/*position: relative;*/
+
+/*z-index: 10000;*/
+
+/*width: 3rem;*/
+
+/*height: 3rem;*/
+
+/*border-radius: 50%;*/
+
+/*border: 0;*/
+
+/*opacity: 0.5;*/
+
+/*background: #fff;*/
+
+/*box-shadow: none;*/
+
+/*appearance: none;*/
+
+/*}*/
+
+/*input[type=range]:focus {*/
+
+/*outline: none;*/
+
+/*}*/
+
+/*input[type=range]:focus::-webkit-slider-runnable-track {*/
+
+/*background: transparent;*/
+
+/*outline: none;*/
+
+/*}*/
+
+.scale_panel span {
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  top: -0.85rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  background-color: rgb(255,255,255);
+  line-height: 1.8rem;
+  border-radius: 1.8rem;
+  border: .16rem solid #888;
+  color: #fff;
+  font-size: 1rem;
+  box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.scale_panel>.scale {
+  position: absolute;
+  top: 1.2rem;
+  z-index: -1;
+  left: 1px;
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  background-color: #ccc;
+  border-left: 1px solid #4a9c20;
+  width: 99%;
+  height: 6px;
+  font-size: 0px;
+  border-radius: 10px;
+}
+
+.scale_panel>.scale>div {
+  background-repeat: repeat-x;
+  background-color: #4a9c20;
+  width: 0px;
+  position: absolute;
+  height: 6px;
+  left: -1px;
+  bottom: 0;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
