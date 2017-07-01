@@ -2054,6 +2054,13 @@
 	    }
 
 	    (0, _createClass3.default)(ControlView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            console.log("componentDidMount");
+	            //this.checkBindDeviceId();  // 检查是不是从 绑定页面回来的,android 回来可以失去连接了.
+	            this.initWXLIB();
+	        }
+	    }, {
 	        key: 'initWXLIB',
 	        value: function initWXLIB() {
 
@@ -2266,6 +2273,50 @@
 	            var jiaer = this.state.hitValue;
 
 	            this.sendByteToDevice(anmo, dianci, value);
+	        }
+	    }, {
+	        key: 'checkBindDeviceId',
+	        value: function checkBindDeviceId() {
+	            var _this = this;
+
+	            (function testFunction() {
+
+	                console.log("test");
+	                _this.setState({
+	                    deviceId: "12313"
+	                });
+	            })();
+	            var deviceid = (0, _Constant.getScanDeviceId)();
+	            if (deviceid.length > 5) {
+	                (0, _Constant.setScanDeviceId)("");
+	                wx.invoke('connectWXDevice', { 'deviceId': deviceid, 'connType': 'blue' }, function (res) {
+	                    console.log("连接设备返回:" + res.err_msg);
+	                    alert("连接返回：" + (0, _stringify2.default)(res));
+	                    var message = res["err_msg"];
+	                    if (message == "connectWXDevice:ok") {
+	                        //新增步骤-先判断是否有已经绑定设备
+	                        wx.invoke('getWXDeviceInfos', { 'connType': 'blue' }, function (res) {
+	                            alert("getWXDeviceInfos " + (0, _stringify2.default)(res));
+	                            var len = res.deviceInfos.length; //绑定设备总数量
+
+	                            for (var _i3 = 0; _i3 <= len - 1; _i3++) {
+	                                //alert(i + ' ' + res.deviceInfos[i].deviceId + ' ' +res.deviceInfos[i].state);
+	                                if (res.deviceInfos[_i3].state === "connected" || res.deviceInfos[_i3].state === "connecting") {
+
+	                                    C_DEVICEID = res.deviceInfos[_i3].deviceId;
+	                                    _this.setState({
+	                                        deviceId: C_DEVICEID
+	                                    });
+
+	                                    var base64Data = (0, _Utils.getDeviceInfoComand)();
+	                                    alert("get device id" + (0, _stringify2.default)(base64Data));
+	                                    _this.sendCommandToDevice(base64Data);
+	                                }
+	                            }
+	                        });
+	                    }
+	                });
+	            }
 	        }
 	    }, {
 	        key: 'eleFeedBack',
@@ -25066,6 +25117,7 @@
 			// },false);
 		},
 		btnTouchClose: function btnTouchClose(e) {
+			e.stopPropagation(); // 其它浏览器下阻止冒泡
 			this.setState({ animationClassName: 'animation-alert-leave', close: 1 });
 			// if(typeof this.props.onAnimationLeave === 'function'){
 			//
@@ -25074,6 +25126,7 @@
 			this.animationEnd();
 		},
 		btnTouchSureClose: function btnTouchSureClose(e) {
+			e.stopPropagation(); // 其它浏览器下阻止冒泡
 			this.setState({ animationClassName: 'animation-alert-leave', close: 1 });
 			this.props.childSetState({ isShowAlert: false, sure: true });
 			this.animationEnd();
@@ -25283,14 +25336,25 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	var reqdomain = "www.aliyunyun.org";
 
 	var brandUserName = "gh_d04b5c778911";
 	//let reqdomain = "10.8.6.34:8999";
 
+	var scanDeviceId = "";
+	function setScanDeviceId(deviceId) {
+	    scanDeviceId = deviceId;
+	}
+
+	function getScanDeviceId() {
+	    return scanDeviceId;
+	}
+
 	exports.reqdomain = reqdomain;
+	exports.setScanDeviceId = setScanDeviceId;
+	exports.getScanDeviceId = getScanDeviceId;
 
 /***/ }),
 /* 283 */
@@ -25802,7 +25866,6 @@
 	        value: function initWXLIB() {
 
 	            var _this = this;
-
 	            wx.ready(function () {
 	                wx.invoke('openWXDeviceLib', {}, function (res) {
 	                    alert("scan openWXDeviceLib:" + (0, _stringify2.default)(res));
@@ -25934,7 +25997,7 @@
 	    }, {
 	        key: 'bindwxbutton',
 	        value: function bindwxbutton() {
-
+	            window.history.go(-1);
 	            var selectIndex = this.state.selectDeviceIndex;
 	            if (selectIndex < 0) {
 	                console.log("请选择设备");
@@ -25969,13 +26032,15 @@
 	                        showAlertMessage: "绑定成功,马上连接",
 	                        needConnectToWXDevice: true
 	                    });
+	                    (0, _Constant.setScanDeviceId)(C_DEVICEID);
 	                } else {
-	                    window.history.go(-1);
+
 	                    _this.setState({
 	                        showAlert: true,
 	                        showAlertMessage: "绑定失败:" + (0, _stringify2.default)(data)
 	                    });
 	                }
+	                window.history.go(-1);
 	            }, function (msg) {
 	                console.log("data:" + (0, _stringify2.default)(msg));
 	                _this.setState({
