@@ -213,7 +213,6 @@ input[type="button"] {
 .flex {
   -webkit-box-orient: horizontal;
   /* OLD */
-  -moz-box-orient: horizontal;
   /* OLD */
   -ms-box-orient: horizontal;
   /* OLD */
@@ -224,7 +223,6 @@ input[type="button"] {
 .flex-column {
   -webkit-box-orient: vertical;
   /* OLD */
-  -moz-box-orient: vertical;
   /* OLD */
   -ms-box-orient: vertical;
   /* OLD */
